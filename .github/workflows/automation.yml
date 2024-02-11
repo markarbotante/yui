@@ -11,6 +11,10 @@ env:
   DOCKER_USER: ${{ secrets.DOCKER_USER }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
+  #AWS Credentials
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+
   # CI Registry
   CI_REGISTRY: ghcr.io/${{ github.repository }}
   CI_REGISTRY_IMAGE: ghcr.io/${{ github.repository }}
@@ -31,8 +35,8 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-access-key-id: $AWS_ACCESS_KEY_ID
+        aws-secret-access-key: $AWS_SECRET_KEY
         aws-region: ap-southeast-1
 
     - name: Login to Amazon ECR
@@ -44,10 +48,9 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: yui
-        IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$APPLICATION_VERSION
 
   # push_to_registry:
   #   name: Push Docker image to Docker Hub
