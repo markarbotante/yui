@@ -27,6 +27,8 @@ jobs:
     name: Push Docker image to AWS ECR
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
+    
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
