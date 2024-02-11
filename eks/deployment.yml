@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yui-api-deployment
+  labels:
+    app: yui-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yui-api
+  template:
+    metadata:
+      labels:
+        app: yui-api
+    spec:
+      containers:
+      - name: yui-api
+        image: ghcr.io/markarbotante/yui:1.0.0-dev
+        ports:
+        - containerPort: 8080
