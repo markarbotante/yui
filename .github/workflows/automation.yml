@@ -32,7 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS Credentials
-      id: login-ecr
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: $AWS_ACCESS_KEY_ID
@@ -51,7 +50,7 @@ jobs:
       run:
         docker build -t $ECR_REGISTRY/ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/ECR_REPOSITORY:$IMAGE_TAG
-        
+
   # push_to_registry:
   #   name: Push Docker image to Docker Hub
   #   runs-on: ubuntu-latest
