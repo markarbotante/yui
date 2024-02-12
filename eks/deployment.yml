@@ -17,5 +17,6 @@ spec:
     containers:
       - name: yui-api
         image: 088497697696.dkr.ecr.ap-southeast-1.amazonaws.com/yui:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
