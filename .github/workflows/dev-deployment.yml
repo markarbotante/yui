@@ -56,8 +56,8 @@ jobs:
     
       - name: Deploy image to AWS EKS
         run: |
-          kubectl apply -f eks/aws-auth.yml -n $APPLICATION_NAMESPACE
-          kubectl apply -f eks/deployment.yml -n $APPLICATION_NAMESPACE
-          kubectl apply -f eks/service.yml -n $APPLICATION_NAMESPACE
-          kubectl apply -f eks/issuer.yml -n $APPLICATION_NAMESPACE
-          kubectl apply -f eks/ingress.yml -n $APPLICATION_NAMESPACE
+          kubectl apply -f eks/aws-auth.yml -n 
+          kubectl apply -f eks/deployment.yml -n 
+          kubectl apply -f eks/service.yml -n 
+          kubectl apply -f eks/issuer.yml -n 
+          kubectl apply -f eks/ingress.yml -n 
