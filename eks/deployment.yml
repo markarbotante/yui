@@ -14,8 +14,9 @@ spec:
       labels:
         app: yui-api
     spec:
-      containers:
+    containers:
       - name: yui-api
-        image: ghcr.io/markarbotante/yui:1.0.0-dev
+        image: 088497697696.dkr.ecr.ap-southeast-1.amazonaws.com/yui:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080

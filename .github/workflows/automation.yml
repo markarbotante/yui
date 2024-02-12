@@ -31,6 +31,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'v1.29.1'
+        id: install
       
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -48,24 +54,15 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: yui
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$APPLICATION_VERSION .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$APPLICATION_VERSION
-
-  # push_to_registry:
-  #   name: Push Docker image to Docker Hub
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-
-  #     - name: Log in to Docker Hub
-  #       run:  |
-  #         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $CI_REGISTRY
-      
-  #     - name: Build Docker Image
-  #       run: |
-  #         docker build -t $CI_REGISTRY_IMAGE:$APPLICATION_VERSION .
-
-  #     - name: Push Docker Image
-  #       run: |
-  #         docker push $CI_REGISTRY_IMAGE:$APPLICATION_VERSION
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t latest .
+          docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
+    
+      - name: Deploy image to AWS EKS
+        run: |
+          kubectl apply -f eks/aws-auth.yml
+          kubectl apply -f eks/deployment.yml
+          kubectl apply -f eks/service.yml
+          kubectl apply -f eks/issuer.yml
+          kubectl apply -f eks/ingress.yml
